@@ -59,7 +59,7 @@ module.exports.login = (req, res) => {
     });
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => {
@@ -68,7 +68,5 @@ module.exports.getCurrentUser = (req, res) => {
         name: user.name,
       });
     })
-    .catch(() => {
-      res.status(404).send({ message: "Usuário não encontrado" });
-    });
+    .catch(next);
 };

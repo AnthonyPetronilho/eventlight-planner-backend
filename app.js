@@ -14,8 +14,14 @@ const app = express();
 const { PORT = 3001, MONGO_URL = "mongodb://127.0.0.1:27017/eventlightdb" } =
   process.env;
 
+const { requestLogger, errorLogger } = require("./utils/logger");
+
+const errorHandler = require("./middlewares/errorHandler");
+
 app.use(cors());
 app.use(express.json());
+
+app.use(requestLogger);
 
 app.get("/", (req, res) => {
   res.send({ message: "EventLight Planner API" });
@@ -28,6 +34,9 @@ app.use(auth);
 
 app.use("/users", usersRouter);
 app.use("/scenes", scenesRouter);
+
+app.use(errorLogger);
+app.use(errorHandler);
 
 mongoose
   .connect(MONGO_URL)
