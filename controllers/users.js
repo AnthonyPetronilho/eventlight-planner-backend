@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
-const { JWT_SECRET = "dev-secret" } = process.env;
+const JWT_SECRET =
+  process.env.NODE_ENV === "production" ? process.env.JWT_SECRET : "dev-secret";
 
 module.exports.createUser = (req, res) => {
   const { email, password, name } = req.body;
