@@ -2,11 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+require("dotenv").config();
+
 const usersRouter = require("./routes/users");
 const scenesRouter = require("./routes/scenes");
 const auth = require("./middlewares/auth");
-
-require("dotenv").config();
+const { createUser, login } = require("./controllers/users");
 
 const app = express();
 
@@ -20,14 +21,13 @@ app.get("/", (req, res) => {
   res.send({ message: "EventLight Planner API" });
 });
 
+app.post("/signup", createUser);
+app.post("/signin", login);
+
 app.use(auth);
 
 app.use("/users", usersRouter);
 app.use("/scenes", scenesRouter);
-
-app.get("/", (req, res) => {
-  res.send({ message: "EventLight Planner API" });
-});
 
 mongoose
   .connect(MONGO_URL)
