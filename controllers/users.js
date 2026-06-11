@@ -69,5 +69,12 @@ module.exports.getCurrentUser = (req, res, next) => {
         name: user.name,
       });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        err.statusCode = 404;
+        err.message = "Usuário não encontrado";
+      }
+
+      next(err);
+    });
 };

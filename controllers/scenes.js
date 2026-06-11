@@ -30,7 +30,13 @@ module.exports.createScene = (req, res, next) => {
     owner: req.user._id,
   })
     .then((scene) => res.status(201).send(scene))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        err.statusCode = 400;
+      }
+
+      next(err);
+    });
 };
 
 module.exports.deleteScene = (req, res, next) => {
@@ -42,5 +48,17 @@ module.exports.deleteScene = (req, res, next) => {
   })
     .orFail()
     .then((scene) => res.send(scene))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "CastError") {
+        err.statusCode = 400;
+        err.message = "ID inválido";
+      }
+
+      if (err.name === "DocumentNotFoundError") {
+        err.statusCode = 404;
+        err.message = "Cena não encontrada";
+      }
+
+      next(err);
+    });
 };

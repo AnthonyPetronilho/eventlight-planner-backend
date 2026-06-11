@@ -1,7 +1,7 @@
-module.exports = (err, req, res, _next) => {
-  console.error(err);
+module.exports = (err, req, res, next) => {
+  const { statusCode = 500 } = err;
 
-  return res.status(500).send({
-    message: "Erro interno do servidor",
-  });
+  const message = statusCode === 500 ? "Erro interno do servidor" : err.message;
+
+  res.status(statusCode).send({ message });
 };
