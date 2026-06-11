@@ -285,7 +285,7 @@ npm run lint
 
 ## Deploy
 
-API pública:
+Backend deployed at:
 
 https://eventlight-api.duckdns.org
 
