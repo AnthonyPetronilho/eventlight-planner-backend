@@ -64,12 +64,10 @@ eventlight-planner-backend
 ├── utils/
 │   └── logger.js
 │
-├── .env
 ├── .gitignore
 ├── app.js
-├── package.json
-├── request.log
-└── error.log
+└── package.json
+
 ```
 
 ---
@@ -282,6 +280,14 @@ Executar análise de código:
 ```bash
 npm run lint
 ```
+
+---
+
+## Deploy
+
+API pública:
+
+https://eventlight-api.duckdns.org
 
 ---
 
