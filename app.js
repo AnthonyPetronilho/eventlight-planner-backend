@@ -18,6 +18,10 @@ const { requestLogger, errorLogger } = require("./utils/logger");
 
 const errorHandler = require("./middlewares/errorHandler");
 
+const { errors } = require("celebrate");
+
+const { validateSignup, validateSignin } = require("./middlewares/validators");
+
 app.use(cors());
 app.use(express.json());
 
@@ -27,8 +31,8 @@ app.get("/", (req, res) => {
   res.send({ message: "EventLight Planner API" });
 });
 
-app.post("/signup", createUser);
-app.post("/signin", login);
+app.post("/signup", validateSignup, createUser);
+app.post("/signin", validateSignin, login);
 
 app.use(auth);
 
@@ -36,6 +40,7 @@ app.use("/users", usersRouter);
 app.use("/scenes", scenesRouter);
 
 app.use(errorLogger);
+app.use(errors());
 app.use(errorHandler);
 
 mongoose

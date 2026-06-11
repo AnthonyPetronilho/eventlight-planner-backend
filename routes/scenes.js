@@ -6,8 +6,13 @@ const {
   deleteScene,
 } = require("../controllers/scenes");
 
+const {
+  validateCreateScene,
+  validateSceneId,
+} = require("../middlewares/validators");
+
 router.get("/", getScenes);
-router.post("/", createScene);
-router.delete("/:sceneId", deleteScene);
+router.post("/", validateCreateScene, createScene);
+router.delete("/:sceneId", validateSceneId, deleteScene);
 
 module.exports = router;
