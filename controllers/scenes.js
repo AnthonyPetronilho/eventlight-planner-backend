@@ -39,6 +39,50 @@ module.exports.createScene = (req, res, next) => {
     });
 };
 
+module.exports.updateScene = (req, res, next) => {
+  const {
+    title,
+    eventType,
+    moment,
+    colors,
+    fixtures,
+    movement,
+    intensity,
+    notes,
+  } = req.body;
+
+  Scene.findOneAndUpdate(
+    {
+      _id: req.params.sceneId,
+      owner: req.user._id,
+    },
+    {
+      title,
+      eventType,
+      moment,
+      colors,
+      fixtures,
+      movement,
+      intensity,
+      notes,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
+    .then((scene) => {
+      if (!scene) {
+        const error = new Error("Cena não encontrada");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      res.send(scene);
+    })
+    .catch(next);
+};
+
 module.exports.deleteScene = (req, res, next) => {
   const { sceneId } = req.params;
 

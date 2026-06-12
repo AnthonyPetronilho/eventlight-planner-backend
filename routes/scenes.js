@@ -4,6 +4,7 @@ const {
   getScenes,
   createScene,
   deleteScene,
+  updateScene,
 } = require("../controllers/scenes");
 
 const {
@@ -13,6 +14,7 @@ const {
 
 router.get("/", getScenes);
 router.post("/", validateCreateScene, createScene);
+router.put("/:sceneId", validateSceneId, updateScene);
 router.delete("/:sceneId", validateSceneId, deleteScene);
 
 module.exports = router;
