@@ -1,7 +1,15 @@
+const { isCelebrateError } = require("celebrate");
+
 module.exports = (err, req, res, _next) => {
+  if (isCelebrateError(err)) {
+    return res.status(400).send({
+      message: "Dados inválidos. Verifique os campos preenchidos.",
+    });
+  }
+
   const { statusCode = 500 } = err;
 
   const message = statusCode === 500 ? "Erro interno do servidor" : err.message;
 
-  res.status(statusCode).send({ message });
+  return res.status(statusCode).send({ message });
 };
