@@ -1,25 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const { errors } = require('celebrate');
 
 require('dotenv').config();
 
-const { errors } = require('celebrate');
 const routes = require('./routes');
-
 const auth = require('./middlewares/auth');
+const limiter = require('./middlewares/rateLimiter');
 const { createUser, login } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./utils/logger');
+const errorHandler = require('./middlewares/errorHandler');
+const { validateSignup, validateSignin } = require('./middlewares/validators');
 
 const app = express();
 
 const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/eventlightdb' } = process.env;
 
-const { requestLogger, errorLogger } = require('./utils/logger');
-const errorHandler = require('./middlewares/errorHandler');
-const { validateSignup, validateSignin } = require('./middlewares/validators');
-
 app.use(cors());
 app.use(express.json());
+
+app.use(helmet());
+app.use(limiter);
 
 app.use(requestLogger);
 
