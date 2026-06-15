@@ -1,4 +1,4 @@
-const Scene = require("../models/scene");
+const Scene = require('../models/scene');
 
 module.exports.getScenes = (req, res, next) => {
   Scene.find({ owner: req.user._id })
@@ -31,11 +31,13 @@ module.exports.createScene = (req, res, next) => {
   })
     .then((scene) => res.status(201).send(scene))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        err.statusCode = 400;
+      if (err.name === 'ValidationError') {
+        const error = new Error('Dados inválidos');
+        error.statusCode = 400;
+        return next(error);
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -73,7 +75,7 @@ module.exports.updateScene = (req, res, next) => {
   )
     .then((scene) => {
       if (!scene) {
-        const error = new Error("Cena não encontrada");
+        const error = new Error('Cena não encontrada');
         error.statusCode = 404;
         throw error;
       }
@@ -93,16 +95,18 @@ module.exports.deleteScene = (req, res, next) => {
     .orFail()
     .then((scene) => res.send(scene))
     .catch((err) => {
-      if (err.name === "CastError") {
-        err.statusCode = 400;
-        err.message = "ID inválido";
+      if (err.name === 'CastError') {
+        const error = new Error('ID inválido');
+        error.statusCode = 400;
+        return next(error);
       }
 
-      if (err.name === "DocumentNotFoundError") {
-        err.statusCode = 404;
-        err.message = "Cena não encontrada";
+      if (err.name === 'DocumentNotFoundError') {
+        const error = new Error('Cena não encontrada');
+        error.statusCode = 404;
+        return next(error);
       }
 
-      next(err);
+      return next(err);
     });
 };

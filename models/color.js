@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const colorSchema = new mongoose.Schema({
   hex: {
@@ -7,14 +7,14 @@ const colorSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    default: "",
+    default: '',
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
     select: false,
   },
 });
 
-module.exports = mongoose.model("color", colorSchema);
+module.exports = mongoose.model('color', colorSchema);

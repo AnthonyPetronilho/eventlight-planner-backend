@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const sceneSchema = new mongoose.Schema({
   title: {
@@ -33,14 +33,14 @@ const sceneSchema = new mongoose.Schema({
   },
   notes: {
     type: String,
-    default: "",
+    default: '',
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
     required: true,
     select: false,
   },
 });
 
-module.exports = mongoose.model("scene", sceneSchema);
+module.exports = mongoose.model('scene', sceneSchema);

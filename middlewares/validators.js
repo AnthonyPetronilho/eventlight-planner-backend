@@ -1,4 +1,4 @@
-const { celebrate, Joi } = require("celebrate");
+const { celebrate, Joi } = require('celebrate');
 
 const validateSignup = celebrate({
   body: Joi.object().keys({
@@ -24,7 +24,7 @@ const validateCreateScene = celebrate({
     fixtures: Joi.array().items(Joi.string().required()).required(),
     movement: Joi.string().required(),
     intensity: Joi.string().required(),
-    notes: Joi.string().allow("").optional(),
+    notes: Joi.string().allow('').optional(),
   }),
 });
 

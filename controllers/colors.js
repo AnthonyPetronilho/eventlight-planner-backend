@@ -1,4 +1,4 @@
-const Color = require("../models/color");
+const Color = require('../models/color');
 
 module.exports.getColors = (req, res, next) => {
   Color.find({ owner: req.user._id })
@@ -25,7 +25,7 @@ module.exports.deleteColor = (req, res, next) => {
   })
     .then((color) => {
       if (!color) {
-        const error = new Error("Cor não encontrada");
+        const error = new Error('Cor não encontrada');
         error.statusCode = 404;
         throw error;
       }
