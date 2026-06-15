@@ -26,10 +26,20 @@ module.exports.createUser = (req, res) => {
     })
     .catch((error) => {
       if (error.code === 11000) {
-        return res.status(409).send({ message: "E-mail já cadastrado" });
+        return res.status(409).send({
+          message: "Este e-mail já está cadastrado.",
+        });
       }
 
-      return res.status(400).send({ message: "Dados inválidos" });
+      if (error.name === "ValidationError") {
+        return res.status(400).send({
+          message: "Dados inválidos. Verifique nome, e-mail e senha.",
+        });
+      }
+
+      return res.status(500).send({
+        message: "Erro interno do servidor.",
+      });
     });
 };
 
