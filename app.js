@@ -4,16 +4,14 @@ const cors = require("cors");
 
 require("dotenv").config();
 
-const usersRouter = require("./routes/users");
-const scenesRouter = require("./routes/scenes");
-const colorRoutes = require("./routes/colors");
+const routes = require("./routes");
 
 const auth = require("./middlewares/auth");
 const { createUser, login } = require("./controllers/users");
 
 const app = express();
 
-const { PORT = 3001, MONGO_URL = "mongodb://127.0.0.1:27017/eventlightdb" } =
+const { PORT = 3000, MONGO_URL = "mongodb://127.0.0.1:27017/eventlightdb" } =
   process.env;
 
 const { requestLogger, errorLogger } = require("./utils/logger");
@@ -35,9 +33,7 @@ app.post("/signin", validateSignin, login);
 
 app.use(auth);
 
-app.use("/users", usersRouter);
-app.use("/scenes", scenesRouter);
-app.use("/colors", colorRoutes);
+app.use("/", routes);
 
 app.use(errorLogger);
 app.use(errors());
