@@ -1,29 +1,55 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const { errors } = require('celebrate');
 
-require("dotenv").config();
+require('dotenv').config();
+
+const routes = require('./routes');
+const auth = require('./middlewares/auth');
+const limiter = require('./middlewares/rateLimiter');
+const { createUser, login } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./utils/logger');
+const errorHandler = require('./middlewares/errorHandler');
+const { validateSignup, validateSignin } = require('./middlewares/validators');
 
 const app = express();
 
-const { PORT = 3001, MONGO_URL = "mongodb://127.0.0.1:27017/eventlightdb" } =
-  process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/eventlightdb' } = process.env;
 
 app.use(cors());
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send({ message: "EventLight Planner API" });
+
+app.use(helmet());
+app.use(limiter);
+
+app.use(requestLogger);
+
+app.get('/', (req, res) => {
+  res.send({ message: 'EventLight Planner API' });
 });
+
+app.post('/signup', validateSignup, createUser);
+app.post('/signin', validateSignin, login);
+
+app.use(auth);
+
+app.use('/', routes);
+
+app.use(errorLogger);
+app.use(errors());
+app.use(errorHandler);
 
 mongoose
   .connect(MONGO_URL)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log('Connected to MongoDB');
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error("MongoDB connection error:", error);
+    console.error('MongoDB connection error:', error);
   });
