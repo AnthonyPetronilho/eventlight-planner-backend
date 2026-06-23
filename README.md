@@ -1,94 +1,84 @@
 # EventLight Planner - Backend
 
-API REST desenvolvida para o projeto **EventLight Planner**, uma plataforma para criação, organização e gerenciamento de cenas de iluminação para eventos como casamentos, festas de 15 anos, formaturas e eventos corporativos.
+API REST desenvolvida para o projeto EventLight Planner.
 
-## Tecnologias Utilizadas
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT (JSON Web Token)
-- bcryptjs
-- Winston
-- Express-Winston
-- ESLint
-- Nodemon
-- dotenv
+Responsável pela autenticação de usuários, gerenciamento da biblioteca de cenas e armazenamento do histórico de cores pesquisadas.
 
 ---
 
 ## Funcionalidades
 
-### Autenticação
+### Usuários
 
-- Cadastro de usuários
-- Login com e-mail e senha
-- Geração de token JWT
-- Rotas protegidas por autenticação
+- Cadastro
+- Login
+- Autenticação JWT
+- Recuperação do usuário autenticado
 
-### Gerenciamento de Cenas
+### Biblioteca de Cenas
 
-- Criar cenas de iluminação
-- Listar cenas do usuário autenticado
-- Excluir cenas criadas pelo usuário
+- Criar cena
+- Editar cena
+- Excluir cena
+- Listar cenas do usuário
 
-### Logs
+### Histórico de Cores
 
-- Registro de todas as requisições em `request.log`
-- Registro de erros em `error.log`
+- Salvar cor pesquisada
+- Listar histórico
+- Remover cor
+- Limpar histórico
 
 ---
 
-## Estrutura do Projeto
+## Tecnologias
 
-```text
-eventlight-planner-backend
-│
-├── controllers/
-│   ├── scenes.js
-│   └── users.js
-│
-├── middlewares/
-│   ├── auth.js
-│   └── errorHandler.js
-│
-├── models/
-│   ├── scene.js
-│   └── user.js
-│
-├── routes/
-│   ├── scenes.js
-│   └── users.js
-│
-├── utils/
-│   └── logger.js
-│
-├── .gitignore
-├── app.js
-└── package.json
+### Backend
 
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+
+### Segurança
+
+- JWT
+- BcryptJS
+- Helmet
+- Express Rate Limit
+
+### Validação
+
+- Celebrate
+- Joi
+
+### Logs
+
+- Winston
+- Express Winston
+
+---
+
+## Estrutura
+
+```txt
+controllers/
+middlewares/
+models/
+routes/
+utils/
+app.js
 ```
 
 ---
 
 ## Instalação
 
-Clone o repositório:
-
 ```bash
-git clone <url-do-repositorio>
-```
+git clone https://github.com/AnthonyPetronilho/eventlight-planner-backend.git
 
-Entre na pasta:
-
-```bash
 cd eventlight-planner-backend
-```
 
-Instale as dependências:
-
-```bash
 npm install
 ```
 
@@ -96,27 +86,25 @@ npm install
 
 ## Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env`:
 
 ```env
-PORT=3001
-
+PORT=3000
 MONGO_URL=mongodb://127.0.0.1:27017/eventlightdb
-
-JWT_SECRET=sua_chave_secreta
+JWT_SECRET=seu_secret
 ```
 
 ---
 
-## Executando o Projeto
+## Executar
 
-### Desenvolvimento
+Modo desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-### Produção
+Produção:
 
 ```bash
 npm start
@@ -124,170 +112,58 @@ npm start
 
 ---
 
-## Rotas da API
-
-### Cadastro
-
-**POST**
-
-```http
-/signup
-```
-
-Body:
-
-```json
-{
-  "email": "usuario@email.com",
-  "password": "12345678",
-  "name": "Nome do Usuário"
-}
-```
-
----
-
-### Login
-
-**POST**
-
-```http
-/signin
-```
-
-Body:
-
-```json
-{
-  "email": "usuario@email.com",
-  "password": "12345678"
-}
-```
-
-Resposta:
-
-```json
-{
-  "token": "jwt_token"
-}
-```
-
----
-
-## Rotas Protegidas
-
-Todas as rotas abaixo exigem:
-
-```http
-Authorization: Bearer TOKEN
-```
-
----
-
-### Obter Usuário Atual
-
-**GET**
-
-```http
-/users/me
-```
-
-Resposta:
-
-```json
-{
-  "email": "usuario@email.com",
-  "name": "Nome do Usuário"
-}
-```
-
----
-
-### Listar Cenas
-
-**GET**
-
-```http
-/scenes
-```
-
----
-
-### Criar Cena
-
-**POST**
-
-```http
-/scenes
-```
-
-Body:
-
-```json
-{
-  "title": "Entrada dos Noivos",
-  "eventType": "Casamento",
-  "moment": "Cerimônia",
-  "colors": ["#FFFFFF", "#FFD700"],
-  "fixtures": ["Moving Head", "Par LED"],
-  "movement": "Slow",
-  "intensity": "80%",
-  "notes": "Cena principal"
-}
-```
-
----
-
-### Excluir Cena
-
-**DELETE**
-
-```http
-/scenes/:sceneId
-```
-
----
-
-## Logs
-
-Os logs são gerados automaticamente:
-
-### request.log
-
-Armazena todas as requisições recebidas pela API.
-
-### error.log
-
-Armazena erros processados pela aplicação.
-
----
-
-## Scripts Disponíveis
-
-Executar em modo desenvolvimento:
+## Scripts
 
 ```bash
 npm run dev
-```
-
-Executar em modo produção:
-
-```bash
 npm start
-```
-
-Executar análise de código:
-
-```bash
 npm run lint
 ```
 
 ---
 
-## Deploy
+## Segurança Implementada
 
-Backend deployed at:
+- Hash de senhas com Bcrypt
+- Autenticação JWT
+- Rate Limiting
+- Helmet
+- Validação de dados com Joi
+- Middleware de autorização
 
-https://eventlight-api.duckdns.org
+---
+
+## Endpoints
+
+### Autenticação
+
+```http
+POST /signup
+POST /signin
+```
+
+### Usuário
+
+```http
+GET /users/me
+```
+
+### Cenas
+
+```http
+GET    /scenes
+POST   /scenes
+PUT    /scenes/:sceneId
+DELETE /scenes/:sceneId
+```
+
+### Cores
+
+```http
+GET    /colors
+POST   /colors
+DELETE /colors/:colorId
+```
 
 ---
 
@@ -295,4 +171,8 @@ https://eventlight-api.duckdns.org
 
 Anthony Celso Petronilho de Souza
 
-Projeto desenvolvido como parte do Projeto Final da TripleTen.
+GitHub:
+https://github.com/AnthonyPetronilho
+
+LinkedIn:
+https://www.linkedin.com/in/anthony-celso-petronilho-de-souza
